@@ -7,6 +7,7 @@ import com.knowl.wiki.req.EbookReq;
 import com.knowl.wiki.resp.EbookResp;
 import com.knowl.wiki.util.CopyUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -19,7 +20,9 @@ public class EbookService {
     public List<EbookResp> list(EbookReq req){
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
-        criteria.andNameLike("%" + req.getName() + "%");
+        if (!ObjectUtils.isEmpty(req.getName())){
+            criteria.andNameLike("%" + req.getName() + "%");
+        };
         List<Ebook> ebooklist = ebookMapper.selectByExample(ebookExample);//会根据ebookExample里面的条件，也就是andNameLike设置的查询语句
 
 //        List<EbookResp> respList = new ArrayList<>();
