@@ -48,13 +48,16 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      Content
+      <pre>
+{{ebooks}}
+{{ebooks2}}
+      </pre>
     </a-layout-content>
   </a-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref, reactive, toRef } from 'vue'; //下面要用什么方法先在这里引入
 // import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 import axios from "axios";
 
@@ -62,9 +65,24 @@ export default defineComponent({
   name: 'HomeView',
   setup(){
     console.log("setup");
-    axios.get("http://localhost:8080/ebook/list?name=Spring").then(function (response){
-      console.log(response);  //(response) =>{}写法也是对的
-    })
+    const ebooks = ref();
+    const ebooks1 = reactive({books:[]}); //reactive后面通常放对象，这里放了一个空的对象，books是自己定义的属性
+
+    onMounted(() => {
+      //初始化逻辑都写到onMounted里面，setup就放一些参数定义，方法定义
+      console.log("onMounted");
+      axios.get("http://localhost:8080/ebook/list?name=Spring").then(function (response){
+        const data = response.data;  //response就是回调时会自动带过来的参数，这里只是取了个名字
+        ebooks.value = data.content;
+        ebooks1.books = data.content;
+        console.log(response);  //(response) =>{}写法也是对的
+      });
+    });
+
+    return {
+      ebooks,  //html要拿到响应式变量（ref）需要在setup后面return
+      ebooks2 :toRef(ebooks1,"books")   //这里必须要定义一个对象ebooks2作为右边的返回值,跟前面的books无关，只是自己取的名字
+    }
   }
 });
 </script>
