@@ -93,18 +93,18 @@ for (let i = 0; i < 23; i++) {
 export default defineComponent({
   name: 'HomeView',
   setup(){
-    console.log("setup");
+    // console.log("setup");
     const ebooks = ref();
     const ebooks1 = reactive({books:[]}); //reactive后面通常放对象，这里放了一个空的对象，books是自己定义的属性
 
     onMounted(() => {
       //初始化逻辑都写到onMounted里面，setup就放一些参数定义，方法定义
-      console.log("onMounted");
+      // console.log("onMounted");
       axios.get("/ebook/list").then(function (response){
         const data = response.data;  //response就是回调时会自动带过来的参数，这里只是取了个名字
         ebooks.value = data.content;
         ebooks1.books = data.content;
-        console.log(response);  //(response) =>{}写法也是对的
+        // console.log(response);  //(response) =>{}写法也是对的
       });
     });
 
