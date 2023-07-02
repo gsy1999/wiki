@@ -100,7 +100,7 @@ export default defineComponent({
     onMounted(() => {
       //初始化逻辑都写到onMounted里面，setup就放一些参数定义，方法定义
       console.log("onMounted");
-      axios.get("http://localhost:8080/ebook/list").then(function (response){
+      axios.get(process.env.VUE_APP_SERVER + "/ebook/list").then(function (response){
         const data = response.data;  //response就是回调时会自动带过来的参数，这里只是取了个名字
         ebooks.value = data.content;
         ebooks1.books = data.content;
