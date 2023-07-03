@@ -76,19 +76,19 @@ import { defineComponent, onMounted, ref, reactive, toRef } from 'vue'; //下面
 // import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 import axios from "axios";
 
-const listData: any = [];
-
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    title: `ant design vue part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
+// const listData: any = [];
+//
+// for (let i = 0; i < 23; i++) {
+//   listData.push({
+//     href: 'https://www.antdv.com/',
+//     title: `ant design vue part ${i}`,
+//     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+//     description:
+//         'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+//     content:
+//         'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+//   });
+// }
 
 export default defineComponent({
   name: 'HomeView',
@@ -100,19 +100,23 @@ export default defineComponent({
     onMounted(() => {
       //初始化逻辑都写到onMounted里面，setup就放一些参数定义，方法定义
       // console.log("onMounted");
-      axios.get("/ebook/list").then(function (response){
+      axios.get("/ebook/list",{
+        params:{
+          page: 1,
+          size: 1000
+        }
+      }).then(function (response){
         const data = response.data;  //response就是回调时会自动带过来的参数，这里只是取了个名字
-        ebooks.value = data.content;
-        ebooks1.books = data.content;
+        ebooks.value = data.content.list;
+        // ebooks1.books = data.content;
         // console.log(response);  //(response) =>{}写法也是对的
       });
     });
 
     return {
       ebooks,  //html要拿到响应式变量（ref）需要在setup后面return
-      ebooks2 :toRef(ebooks1,"books"),   //这里必须要定义一个对象ebooks2作为右边的返回值,跟前面的books无关，只是自己取的名字
-
-      listData,
+      // ebooks2 :toRef(ebooks1,"books"),   //这里必须要定义一个对象ebooks2作为右边的返回值,跟前面的books无关，只是自己取的名字
+      // listData,
       pagination: {
         onChange: (page: any) => {
           console.log(page);
