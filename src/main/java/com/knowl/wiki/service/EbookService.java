@@ -61,19 +61,19 @@ public class EbookService {
     /**
      * 保存
      */
-    public void save(EbookSaveReq req){
+    public void save(EbookSaveReq req) {
         Ebook ebook = CopyUtil.copy(req, Ebook.class);  //将请求参数转变为ebook实体，再更新进
-        if(ObjectUtils.isEmpty(req.getId())){
-            //新增
+        if (ObjectUtils.isEmpty(req.getId())) {
+            // 新增
             ebook.setId(snowFlake.nextId());
             ebookMapper.insert(ebook);
-        }else {
-            //更新
+        } else {
+            // 更新
             ebookMapper.updateByPrimaryKey(ebook);
         }
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         ebookMapper.deleteByPrimaryKey(id);
     }
 
