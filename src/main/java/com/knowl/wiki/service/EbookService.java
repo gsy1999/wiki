@@ -10,6 +10,7 @@ import com.knowl.wiki.req.EbookSaveReq;
 import com.knowl.wiki.resp.EbookQueryResp;
 import com.knowl.wiki.resp.PageResp;
 import com.knowl.wiki.util.CopyUtil;
+import com.knowl.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ public class EbookService {
 
     @Resource
     private EbookMapper ebookMapper;
+
+    @Resource
+    private SnowFlake snowFlake;
 
     public PageResp<EbookQueryResp> list(EbookQueryReq req){
         EbookExample ebookExample = new EbookExample();
@@ -61,6 +65,8 @@ public class EbookService {
         Ebook ebook = CopyUtil.copy(req, Ebook.class);  //将请求参数转变为ebook实体，再更新进
         if(ObjectUtils.isEmpty(req.getId())){
             //新增
+            ebook.setId(snowFlake.nextId());
+            ebookMapper.insert(ebook);
         }else {
             //更新
             ebookMapper.updateByPrimaryKey(ebook);
