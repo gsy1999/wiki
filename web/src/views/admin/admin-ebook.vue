@@ -42,8 +42,11 @@
       <a-form-item label="名称">
         <a-input v-model:value="ebook.name" />
       </a-form-item>
-      <a-form-item label="分类">
-        <a-input v-model:value="ebook.categoryId" />
+      <a-form-item label="分类1">
+        <a-input v-model:value="ebook.category1Id" />
+      </a-form-item>
+      <a-form-item label="分类2">
+        <a-input v-model:value="ebook.category2Id" />
       </a-form-item>
       <a-form-item label="描述">
         <a-input v-model:value="ebook.description" type="textarea" />
@@ -78,8 +81,16 @@ export default defineComponent({
         dataIndex: 'name'
       },
       {
-        title: '分类',
-        slots: {customRender: 'category'}
+        title: '分类1',
+        key: 'category1Id',
+        dataIndex: 'category1Id',
+        slots: {customRender: 'category1Id'}
+      },
+      {
+        title: '分类2',
+        key: 'category2Id',
+        dataIndex: 'category2Id',
+        slots: {customRender: 'category2Id'}
       },
       {
         title: '文档数',
@@ -141,10 +152,19 @@ export default defineComponent({
     const modalLoading = ref(false);
     const handleModalOk = () => {
       modalLoading.value = true;
-      setTimeout(() => {
-        modalLoading.value = false;
-        modalVisible.value = false;
-      }, 2000);
+      axios.post("/ebook/save", ebook.value).then((response) => {
+        const data = response.data; //data = commonResp
+        if(data.success){
+          modalLoading.value = false;
+          modalVisible.value = false;
+
+          //重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          });
+        }
+      })
     };
 
     /**

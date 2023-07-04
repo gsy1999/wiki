@@ -1,6 +1,6 @@
-package com.knowl.wiki.resp;
+package com.knowl.wiki.req;
 
-public class EbookResp {
+public class EbookSaveReq {
     private Long id;
 
     private String name;
