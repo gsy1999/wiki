@@ -97,25 +97,14 @@ export default defineComponent({
     };
 
     const isShowWelcome = ref(true);
-    const handleClick = (value: any) => {
-      // console.log("menu click", value)
-      // if (value.key === 'welcome') {
-      //   isShowWelcome.value = true;
-      // } else {
-      //   isShowWelcome.value = false;
-      // }
-      isShowWelcome.value = value.key === 'welcome';
-    }
+    let categoryId2 = 0;
 
-
-    onMounted(() => {
-      //初始化逻辑都写到onMounted里面，setup就放一些参数定义，方法定义
-      // console.log("onMounted");
-      handleQueryCategory();
+    const handleQueryEbook = () => {
       axios.get("/ebook/list",{
         params:{
           page: 1,
-          size: 1000
+          size: 1000,
+          categoryId2: categoryId2
         }
       }).then(function (response){
         const data = response.data;  //response就是回调时会自动带过来的参数，这里只是取了个名字
@@ -123,6 +112,25 @@ export default defineComponent({
         // ebooks1.books = data.content;
         // console.log(response);  //(response) =>{}写法也是对的
       });
+    };
+
+    const handleClick = (value: any) => {
+      // console.log("menu click", value)
+      if (value.key === 'welcome') {
+        isShowWelcome.value = true;
+      } else {
+        categoryId2 = value.key;
+        isShowWelcome.value = false;
+        handleQueryEbook();
+      }
+      // isShowWelcome.value = value.key === 'welcome';
+    }
+
+    onMounted(() => {
+      //初始化逻辑都写到onMounted里面，setup就放一些参数定义，方法定义
+      // console.log("onMounted");
+      handleQueryCategory();
+      // handleQueryEbook();
     });
 
     return {
