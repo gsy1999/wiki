@@ -7,10 +7,8 @@
           @click="handleClick"
       >
         <a-menu-item key="welcome">
-          <router-link to="'/'">
             <MailOutlined />
             <span>欢迎</span>
-          </router-link>
         </a-menu-item>
         <a-sub-menu v-for="item in level1" :key="item.id">
           <template v-slot:title>
@@ -25,7 +23,10 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-list item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
+      <div class="welcome" v-show="isShowWelcome">
+        <h1>欢迎使用</h1>
+      </div>
+      <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
@@ -95,9 +96,17 @@ export default defineComponent({
       });
     };
 
+    const isShowWelcome = ref(true);
     const handleClick = (value: any) => {
-      console.log("menu click", value)
-      }
+      // console.log("menu click", value)
+      // if (value.key === 'welcome') {
+      //   isShowWelcome.value = true;
+      // } else {
+      //   isShowWelcome.value = false;
+      // }
+      isShowWelcome.value = value.key === 'welcome';
+    }
+
 
     onMounted(() => {
       //初始化逻辑都写到onMounted里面，setup就放一些参数定义，方法定义
@@ -135,6 +144,7 @@ export default defineComponent({
 
       handleClick,
       level1,
+      isShowWelcome
     }
   }
 });
