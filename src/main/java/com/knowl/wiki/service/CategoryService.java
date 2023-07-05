@@ -30,9 +30,20 @@ public class CategoryService {
     @Resource
     private SnowFlake snowFlake;
 
+    public List<CategoryQueryResp> all(){
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort asc");
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);//会根据categoryExample里面的条件，也就是andNameLike设置的查询语句
+
+        List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);
+        return list;
+    }
+
     public PageResp<CategoryQueryResp> list(CategoryQueryReq req){
         CategoryExample categoryExample = new CategoryExample();
-        CategoryExample.Criteria criteria = categoryExample.createCriteria();
+        CategoryExample.Criteria criteria = categoryExample.createCriteria(); //Criteria相当于where条件，这两行无论是用哪张表的example都是这样
+        categoryExample.setOrderByClause("sort asc");
+//        criteria.andNameLike("%" + req.getName + "%");
         PageHelper.startPage(req.getPage(), req.getSize());//这一行要跟最重要查询的语句放在一起，不然中间如果还有别的语句就会失效
         List<Category> categoryList = categoryMapper.selectByExample(categoryExample);//会根据categoryExample里面的条件，也就是andNameLike设置的查询语句
 
@@ -48,7 +59,7 @@ public class CategoryService {
 //            respList.add(categoryResp);
 //        }
 
-        List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);
+        List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);//因为要将返回值改成通用的返回值
         PageResp<CategoryQueryResp> pageResp = new PageResp();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
