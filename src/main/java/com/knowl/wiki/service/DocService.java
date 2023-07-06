@@ -18,6 +18,8 @@ import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class DocService {
@@ -83,6 +85,14 @@ public class DocService {
 
     public void delete(Long id) {
         docMapper.deleteByPrimaryKey(id);
+    }
+
+    public void delete(List<String> ids) {
+        DocExample docExample = new DocExample();
+        DocExample.Criteria criteria = docExample.createCriteria();
+        List<Long> idList = ids.stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+        criteria.andIdIn(idList);
+        docMapper.deleteByExample(docExample);
     }
 
 }
