@@ -27,7 +27,9 @@ public class DocController {
         resp.setContent(list);
         return resp;
 
-    }@GetMapping("/list")
+    }
+
+    @GetMapping("/list")
     public CommonResp list(@Valid DocQueryReq req){  //@Valid意为，这组参数要开启校验规则
         CommonResp<PageResp<DocQueryResp>> resp = new CommonResp<>();
         PageResp<DocQueryResp> list = docService.list(req);
@@ -47,6 +49,14 @@ public class DocController {
         CommonResp resp = new CommonResp<>();
         List<String> list = Arrays.asList(idsStr.split(","));
         docService.delete(list);
+        return resp;
+    }
+
+    @GetMapping("/find-content/{id}")
+    public CommonResp findContent(@PathVariable Long id){
+        CommonResp<String> resp = new CommonResp<>();
+        String content = docService.findContent(id);
+        resp.setContent(content);
         return resp;
     }
 }
