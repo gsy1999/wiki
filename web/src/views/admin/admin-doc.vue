@@ -126,6 +126,9 @@ export default defineComponent({
     param.value = {};
     const docs = ref();
     const loading = ref(false);
+    const treeSelectData = ref();
+    treeSelectData.value = [];
+
 
     const columns = [
       {
@@ -234,6 +237,9 @@ export default defineComponent({
           level1.value = [];
           level1.value = Tool.array2Tree(docs.value, 0);
           console.log("树形结构：", level1);
+
+          treeSelectData.value = Tool.copy(level1.value);
+          treeSelectData.value.unshift({id: 0, name: '无'});
         }else {
           message.error(data.message);
         }
@@ -244,8 +250,7 @@ export default defineComponent({
     /**
      * 数组，[100, 101]对应：前端开发 / Vue
      */
-    const treeSelectData = ref();
-    treeSelectData.value = [];
+
     const doc = ref();
     doc.value={};
     const modalVisible = ref(false);
