@@ -2,8 +2,10 @@ package com.knowl.wiki.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.knowl.wiki.domain.Content;
 import com.knowl.wiki.domain.Doc;
 import com.knowl.wiki.domain.DocExample;
+import com.knowl.wiki.mapper.ContentMapper;
 import com.knowl.wiki.mapper.DocMapper;
 import com.knowl.wiki.req.DocQueryReq;
 import com.knowl.wiki.req.DocSaveReq;
@@ -31,6 +33,9 @@ public class DocService {
 
     @Resource
     private SnowFlake snowFlake;
+
+    @Resource
+    private ContentMapper contentMapper;
 
     public List<DocQueryResp> all(){
         DocExample docExample = new DocExample();
@@ -73,13 +78,21 @@ public class DocService {
      */
     public void save(DocSaveReq req) {
         Doc doc = CopyUtil.copy(req, Doc.class);  //将请求参数转变为doc实体，再更新进
+        Content content = CopyUtil.copy(req, Content.class);  //将请求参数中的content转变为content实体，再更新进
         if (ObjectUtils.isEmpty(req.getId())) {
             // 新增
             doc.setId(snowFlake.nextId());
             docMapper.insert(doc);
+
+            content.setId(doc.getId()); //因为nextid会重新生成一个id，导致跟上面的id不同，所以直接把上面能生成的拿过来用
+            contentMapper.insert(content);
         } else {
             // 更新
             docMapper.updateByPrimaryKey(doc);
+            int count = contentMapper.updateByPrimaryKeyWithBLOBs(content); //这个方法包含对大字段的操作
+            if(count==0){
+                contentMapper.insert(content);
+            }
         }
     }
 
