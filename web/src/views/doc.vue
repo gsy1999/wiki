@@ -1,6 +1,7 @@
 <template>
   <a-layout>
     <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+      <h3 v-if="level1.length === 0">对不起，找不到相关文档！</h3>
       <a-row>
         <a-col :span="6">
           <a-tree
@@ -91,7 +92,7 @@ export default defineComponent({
         if (data.success) {
           docs.value = data.content;
 
-          level1.value= [];
+          level1.value = [];
           level1.value = Tool.array2Tree(docs.value, 0);
 
           if (Tool.isNotEmpty(level1)) {

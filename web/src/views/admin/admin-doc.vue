@@ -261,7 +261,9 @@ export default defineComponent({
      */
 
     const doc = ref();
-    doc.value={};
+    doc.value={
+      ebookId: route.query.ebookId
+    };
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     const editor = new E('#content');
