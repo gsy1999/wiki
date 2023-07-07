@@ -21,12 +21,11 @@ public class DocController {
     private DocService docService;
 
     @GetMapping("/all/{ebookId}")
-    public CommonResp all(@PathVariable Long ebookId){
+    public CommonResp all(@PathVariable Long ebookId) {
         CommonResp<List<DocQueryResp>> resp = new CommonResp<>();
         List<DocQueryResp> list = docService.all(ebookId);
         resp.setContent(list);
         return resp;
-
     }
 
     @GetMapping("/list")
