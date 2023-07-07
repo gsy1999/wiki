@@ -45,8 +45,8 @@
 <!--        <table tableName="category"/>-->
         <!--<table tableName="category"/>-->
         <!--<table tableName="doc"/>-->
-        <table tableName="content"/>
-        <!--<table tableName="user"/>-->
+<!--        <table tableName="content"/>-->
+        <table tableName="user"/>
 <!--        <table tableName="demo" domainObjectionName="Demo"/>-->
     </context>
 </generatorConfiguration>
