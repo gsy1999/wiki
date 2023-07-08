@@ -78,7 +78,8 @@ public class UserService {
             }
         } else {
             // 更新
-            userMapper.updateByPrimaryKey(user);
+            user.setLoginName(null); //这样下面就不会更新用户名这个字段
+            userMapper.updateByPrimaryKeySelective(user);  //加上Selective意思是，判断user属性有值才会更新，没有值就不更新这个字段，所以上面先把值清空
         }
     }
 
