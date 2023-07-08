@@ -6,6 +6,7 @@ import com.knowl.wiki.resp.CommonResp;
 import com.knowl.wiki.resp.PageResp;
 import com.knowl.wiki.resp.UserQueryResp;
 import com.knowl.wiki.service.UserService;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,6 +29,7 @@ public class UserController {
 
     @PostMapping("/save")
     public CommonResp save(@Valid @RequestBody UserSaveReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes())); //变成一个32位16进制
         CommonResp resp = new CommonResp<>();
         userService.save(req);
         return resp;
