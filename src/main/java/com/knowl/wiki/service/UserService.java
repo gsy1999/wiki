@@ -8,6 +8,7 @@ import com.knowl.wiki.exception.BusinessException;
 import com.knowl.wiki.exception.BusinessExceptionCode;
 import com.knowl.wiki.mapper.UserMapper;
 import com.knowl.wiki.req.UserQueryReq;
+import com.knowl.wiki.req.UserResetPasswordReq;
 import com.knowl.wiki.req.UserSaveReq;
 import com.knowl.wiki.resp.PageResp;
 import com.knowl.wiki.resp.UserQueryResp;
@@ -98,6 +99,14 @@ public class UserService {
         }else {
             return userList.get(0);
         }
+    }
+
+    /**
+     * 修改密码
+     */
+    public void resetPassword(UserResetPasswordReq req) {
+        User user = CopyUtil.copy(req, User.class);  //将请求参数转变为user实体，再更新进
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
 }
