@@ -22,7 +22,10 @@
       <a-menu-item key="/about">
         <router-link to="/about">关于我们</router-link>
       </a-menu-item>
-      <a class="login-menu" @click="showLoginModal">
+      <a class="login-menu" v-show="user.id">
+        <span>您好：{{user.name}}</span>
+      </a>
+      <a class="login-menu" v-show="!user.id" @click="showLoginModal">
         <span>登录</span>
       </a>
     </a-menu>
@@ -61,10 +64,13 @@ export default defineComponent({
     // 登录后保存
     // const user = computed(() => store.state.user);
 
+    const user = ref();
+    user.value = {};
+
     // 用来登录
     const loginUser = ref({
       loginName: "test",
-      password: "test"
+      password: "test123"
     });
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);
@@ -83,6 +89,7 @@ export default defineComponent({
         if (data.success) {
           loginModalVisible.value = false;
           message.success("登录成功！");
+          user.value = data.content;
 
           // store.commit("setUser", data.content);
         } else {
@@ -111,7 +118,7 @@ export default defineComponent({
       showLoginModal,
       loginUser,
       login,
-      // user,
+      user,
       logout
     }
 
