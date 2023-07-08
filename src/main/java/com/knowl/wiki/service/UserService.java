@@ -7,10 +7,12 @@ import com.knowl.wiki.domain.UserExample;
 import com.knowl.wiki.exception.BusinessException;
 import com.knowl.wiki.exception.BusinessExceptionCode;
 import com.knowl.wiki.mapper.UserMapper;
+import com.knowl.wiki.req.UserLoginReq;
 import com.knowl.wiki.req.UserQueryReq;
 import com.knowl.wiki.req.UserResetPasswordReq;
 import com.knowl.wiki.req.UserSaveReq;
 import com.knowl.wiki.resp.PageResp;
+import com.knowl.wiki.resp.UserLoginResp;
 import com.knowl.wiki.resp.UserQueryResp;
 import com.knowl.wiki.util.CopyUtil;
 import com.knowl.wiki.util.SnowFlake;
@@ -107,6 +109,28 @@ public class UserService {
     public void resetPassword(UserResetPasswordReq req) {
         User user = CopyUtil.copy(req, User.class);  //将请求参数转变为user实体，再更新进
         userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    /**
+     * 登录
+     */
+    public UserLoginResp login(UserLoginReq req) {
+        User userDb = selectByLoginName(req.getLoginName());
+        if(ObjectUtils.isEmpty(userDb)){
+            //用户名不存在
+            LOG.info("用户名不存在，{}", req.getLoginName());
+            throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+        } else {
+            if(userDb.getPassword().equals(req.getPassword())){
+                //登录成功
+                UserLoginResp userLoginResp = CopyUtil.copy(userDb,UserLoginResp.class);
+                return userLoginResp;
+            }else {
+                //密码错误
+                LOG.info("密码不对，输入密码：{}，数据库密码：{}", req.getPassword(),userDb.getPassword());
+                throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+            }
+        }
     }
 
 }
