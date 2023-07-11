@@ -7,6 +7,7 @@ import com.knowl.wiki.domain.Doc;
 import com.knowl.wiki.domain.DocExample;
 import com.knowl.wiki.mapper.ContentMapper;
 import com.knowl.wiki.mapper.DocMapper;
+import com.knowl.wiki.mapper.DocMapperCust;
 import com.knowl.wiki.req.DocQueryReq;
 import com.knowl.wiki.req.DocSaveReq;
 import com.knowl.wiki.resp.DocQueryResp;
@@ -30,6 +31,9 @@ public class DocService {
 
     @Resource
     private DocMapper docMapper;
+
+    @Resource
+    private DocMapperCust docMapperCust;
 
     @Resource
     private SnowFlake snowFlake;
@@ -85,6 +89,8 @@ public class DocService {
         if (ObjectUtils.isEmpty(req.getId())) {
             // 新增
             doc.setId(snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
 
             content.setId(doc.getId()); //因为nextid会重新生成一个id，导致跟上面的id不同，所以直接把上面能生成的拿过来用
@@ -113,6 +119,8 @@ public class DocService {
 
     public String findContent(Long id){
         Content content = contentMapper.selectByPrimaryKey(id);
+        //文档阅读数+1
+        docMapperCust.increaseViewCount(id);
         if (ObjectUtils.isEmpty(content)) {
             return "";
         } else {
