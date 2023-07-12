@@ -1,6 +1,7 @@
 package com.knowl.wiki.service;
 
 import com.knowl.wiki.websocket.WebSocketServer;
+import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,8 @@ public class WsService {
     public WebSocketServer webSocketServer;
 
     @Async
-    public void sendInfo(String message) {
-//        MDC.put("LOG_ID", logId);
+    public void sendInfo(String message,String logId) {
+        MDC.put("LOG_ID", logId); //把流水号放到线程中
         webSocketServer.sendInfo(message);
     }
 
