@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.knowl.wiki.domain.Content;
 import com.knowl.wiki.domain.Doc;
 import com.knowl.wiki.domain.DocExample;
+import com.knowl.wiki.exception.BusinessException;
+import com.knowl.wiki.exception.BusinessExceptionCode;
 import com.knowl.wiki.mapper.ContentMapper;
 import com.knowl.wiki.mapper.DocMapper;
 import com.knowl.wiki.mapper.DocMapperCust;
@@ -13,6 +15,8 @@ import com.knowl.wiki.req.DocSaveReq;
 import com.knowl.wiki.resp.DocQueryResp;
 import com.knowl.wiki.resp.PageResp;
 import com.knowl.wiki.util.CopyUtil;
+import com.knowl.wiki.util.RedisUtil;
+import com.knowl.wiki.util.RequestContext;
 import com.knowl.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +44,9 @@ public class DocService {
 
     @Resource
     private ContentMapper contentMapper;
+
+    @Resource
+    public RedisUtil redisUtil;
 
     public List<DocQueryResp> all(Long ebookId) {
         DocExample docExample = new DocExample();
@@ -132,7 +139,20 @@ public class DocService {
     点赞
      */
     public void vote(Long id){
-        docMapperCust.increaseVoteCount(id);
+        // docMapperCust.increaseVoteCount(id);
+        // 远程IP+doc.id作为key，24小时内不能重复
+        String ip = RequestContext.getRemoteAddr();
+        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 5000)) {
+            docMapperCust.increaseVoteCount(id);
+        } else {
+            throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+        }
+
+//        // 推送消息
+//        Doc docDb = docMapper.selectByPrimaryKey(id);
+//        String logId = MDC.get("LOG_ID");
+//        wsService.sendInfo("【" + docDb.getName() + "】被点赞！", logId);
+//        // rocketMQTemplate.convertAndSend("VOTE_TOPIC", "【" + docDb.getName() + "】被点赞！");
     }
 
 }
