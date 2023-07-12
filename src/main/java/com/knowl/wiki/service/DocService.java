@@ -52,6 +52,9 @@ public class DocService {
     @Resource
     public WebSocketServer webSocketServer;
 
+    @Resource
+    public WsService wsService;
+
     public List<DocQueryResp> all(Long ebookId) {
         DocExample docExample = new DocExample();
         docExample.createCriteria().andEbookIdEqualTo(ebookId);
@@ -153,12 +156,13 @@ public class DocService {
         }
 
 //        // 推送消息
+
         Doc docDb = docMapper.selectByPrimaryKey(id);
-        webSocketServer.sendInfo(docDb.getName() + "被点赞！");
 //        String logId = MDC.get("LOG_ID");
-//        wsService.sendInfo("【" + docDb.getName() + "】被点赞！", logId);
+        wsService.sendInfo("【" + docDb.getName() + "】被点赞！");
 //        // rocketMQTemplate.convertAndSend("VOTE_TOPIC", "【" + docDb.getName() + "】被点赞！");
     }
+
 
     public void updateEbookInfo(){
         docMapperCust.updateEbookInfo();
