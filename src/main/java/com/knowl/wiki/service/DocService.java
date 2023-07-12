@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -98,6 +99,7 @@ public class DocService {
     /**
      * 保存
      */
+    @Transactional //需要加事务得地方加上这个注解，因为下面同时操作两张表了，并且和异步注解一样，当同一个类里别的方法调用它时，注解也不会生效
     public void save(DocSaveReq req) {
         Doc doc = CopyUtil.copy(req, Doc.class);  //将请求参数转变为doc实体，再更新进
         Content content = CopyUtil.copy(req, Content.class);  //将请求参数中的content转变为content实体，再更新进
