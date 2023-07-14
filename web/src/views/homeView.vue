@@ -5,12 +5,13 @@
           mode="inline"
           :style="{ height: '100%', borderRight: 0 }"
           @click="handleClick"
+          :openKeys="openKeys"
       >
         <a-menu-item key="welcome">
-            <MailOutlined />
-            <span>欢迎</span>
+          <MailOutlined />
+          <span>欢迎</span>
         </a-menu-item>
-        <a-sub-menu v-for="item in level1" :key="item.id">
+        <a-sub-menu v-for="item in level1" :key="item.id" >
           <template v-slot:title>
             <span><user-outlined />{{item.name}}</span>
           </template>
@@ -18,13 +19,16 @@
             <MailOutlined /><span>{{child.name}}</span>
           </a-menu-item>
         </a-sub-menu>
+<!--        <a-menu-item key="tip" :disabled="true">-->
+<!--          <span>以上菜单在分类管理配置</span>-->
+<!--        </a-menu-item>-->
       </a-menu>
     </a-layout-sider>
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <div class="welcome" v-show="isShowWelcome">
-        <h1>欢迎使用</h1>
+        <the-welcome></the-welcome>
       </div>
       <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
         <template #renderItem="{ item }">
@@ -43,7 +47,6 @@
                 {{ item.voteCount }}
               </span>
             </template>
-
             <a-list-item-meta :description="item.description">
               <template #title>
                 <router-link :to="'/doc?ebookId=' + item.id">
@@ -65,6 +68,9 @@ import { defineComponent, onMounted, ref, reactive, toRef } from 'vue'; //下面
 import axios from "axios";
 import { message } from 'ant-design-vue';
 import {Tool} from "@/util/tool";
+import TheWelcome from '@/components/the-welcome.vue';
+import TheHeader from "@/components/the-header.vue";
+import TheFooter from "@/components/the-footer.vue";
 
 // const listData: any = [];
 //
@@ -80,8 +86,13 @@ import {Tool} from "@/util/tool";
 //   });
 // }
 
+
+
 export default defineComponent({
   name: 'HomeView',
+  components:{
+    TheWelcome
+  },
   setup(){
     // console.log("setup");
     const ebooks = ref();
