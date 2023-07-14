@@ -57,6 +57,9 @@ public class DocService {
     @Resource
     public WsService wsService;
 
+//     @Resource
+//     private RocketMQTemplate rocketMQTemplate;
+
     public List<DocQueryResp> all(Long ebookId) {
         DocExample docExample = new DocExample();
         docExample.createCriteria().andEbookIdEqualTo(ebookId);
