@@ -1,19 +1,21 @@
 package com.knowl.wiki.resp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class StatisticResp {
 
+    @JsonFormat(pattern="MM-dd", timezone = "GMT+8")
     private Date date;
 
-    private Integer viewCount;
+    private int viewCount;
 
-    private Integer voteCount;
+    private int voteCount;
 
-    private Integer viewIncrease;
+    private int viewIncrease;
 
-    private Integer voteIncrease;
-
+    private int voteIncrease;
 
     public Date getDate() {
         return date;
@@ -23,50 +25,46 @@ public class StatisticResp {
         this.date = date;
     }
 
-    public Integer getViewCount() {
+    public int getViewCount() {
         return viewCount;
     }
 
-    public void setViewCount(Integer viewCount) {
+    public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
     }
 
-    public Integer getVoteCount() {
+    public int getVoteCount() {
         return voteCount;
     }
 
-    public void setVoteCount(Integer voteCount) {
+    public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
     }
 
-    public Integer getViewIncrease() {
+    public int getViewIncrease() {
         return viewIncrease;
     }
 
-    public void setViewIncrease(Integer viewIncrease) {
+    public void setViewIncrease(int viewIncrease) {
         this.viewIncrease = viewIncrease;
     }
 
-    public Integer getVoteIncrease() {
+    public int getVoteIncrease() {
         return voteIncrease;
     }
 
-    public void setVoteIncrease(Integer voteIncrease) {
+    public void setVoteIncrease(int voteIncrease) {
         this.voteIncrease = voteIncrease;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", date=").append(date);
-        sb.append(", viewCount=").append(viewCount);
-        sb.append(", voteCount=").append(voteCount);
-        sb.append(", viewIncrease=").append(viewIncrease);
-        sb.append(", voteIncrease=").append(voteIncrease);
-        sb.append("]");
-        return sb.toString();
+        return "StatisticResp{" +
+                "date=" + date +
+                ", viewCount=" + viewCount +
+                ", voteCount=" + voteCount +
+                ", viewIncrease=" + viewIncrease +
+                ", voteIncrease=" + voteIncrease +
+                '}';
     }
 }
