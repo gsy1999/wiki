@@ -107,5 +107,20 @@ create table `user` (
 
 insert into `user` (id, login_name, name, password) VALUES (1, 'test', '测试', 'e70e2222a9d67c4f2eae107533359aa4');
 
+#用户表
+drop table if exists `ebook_snapshot` ;
+create table `ebook_snapshot` (
+                        `id` bigint auto_increment not null comment 'id',
+                        `ebook_id` bigint not null default 0 comment '电子书id',
+                        `date` date not null comment '快照日期',
+                        `view_count` int default 0 comment '阅读量',
+                        `vote_count` int default 0 comment '点赞数',
+                        `view_increase` int null default 0 comment '阅读增长',
+                        `vote_increase` int null default 0 comment '点赞增长',
+                        primary key (`id`)
+) engine=innodb default charset=utf8mb4 comment='电子书快照表';
+
+
+
 
 
