@@ -80,7 +80,7 @@ export default defineComponent({
     // 用来登录
     const loginUser = ref({
       loginName: "test",
-      password: "test123"
+      password: "test"
     });
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);
@@ -136,15 +136,15 @@ export default defineComponent({
 </script>
 
 <style>
-/*.logo {*/
-/*  width: 120px;*/
-/*  height: 31px;*/
-/*  !*background: rgba(255, 255, 255, 0.2);*!*/
-/*  !*margin: 16px 28px 16px 0;*!*/
-/*  float: left;*/
-/*  color: white;*/
-/*  font-size: 18px;*/
-/*}*/
+.logo {
+  width: 120px;
+  height: 31px;
+  /*background: rgba(255, 255, 255, 0.2);*/
+  /*margin: 16px 28px 16px 0;*/
+  float: left;
+  color: white;
+  font-size: 18px;
+}
 .login-menu {
   float: right;
   color: white;
